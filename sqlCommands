@@ -14,7 +14,7 @@
   user_id int,
   status VARCHAR(6),
   created_at datetime ,
-  CONSTRAINT const2 CHECK status='start' OR status='finish',
+  CONSTRAINT const2 CHECK (status='start' OR status='finish'),
   CONSTRAINT const4 DEFAULT GETDATE() created_at);
   
   CREATE TABLE users (
@@ -24,7 +24,8 @@
   gender char(1) ,
   date_of_birth VARCHAR(15),
   created_at datetime,
-  CONSTRAINT const CHECK gender='F' OR gender='M');
+  CONSTRAINT const CHECK (gender='F' OR gender='M')
+  );
   
   CREATE TABLE order_products (
   quantity int DEFAULT 0 );
