@@ -1,0 +1,71 @@
+CREATE DATABASE store;
+
+
+-- --
+  CREATE TABLE order_products (
+  order_id int PRIMARY KEY,
+  product_id int NOT NULL,
+  quantity int DEFAULT 0 );
+
+-- --
+  CREATE TABLE products (
+  id int FOREIGN KEY REFERENCES order_products(order_id),
+  name VARCHAR(10) NOT NULL,
+  price int DEFAULT 0,
+  status VARCHAR(10),
+  created_at datetime
+  CONSTRAINT const3 CHECK status='valid' OR status='expired');
+  
+-- --
+  CREATE TABLE orders (
+  id int FOREIGN KEY REFERENCES order_products(order_id),
+  user_id int,
+  status VARCHAR(6),
+  created_at datetime ,
+  CONSTRAINT const2 CHECK status='start' OR status='finish',
+  CONSTRAINT const4 DEFAULT GETDATE() created_at);
+  
+  -- --
+  CREATE TABLE users (
+  id INTEGER FOREIGN KEY REFERENCES orders(id),
+  full_name VARCHAR(20),
+  email VARCHAR(20) unique,
+  gender char(1) ,
+  date_of_birth VARCHAR(15),
+  created_at datetime,
+  country_code int NOT NULL 
+  CONSTRAINT const CHECK gender='F' OR gender='M');
+  
+-- --
+  CREATE TABLE countries (
+  code int FOREIGN KEY REFERENCES users(country_code),
+  name VARCHAR(20) unique,
+  continent_name VARCHAR(20) NOT NULL);
+  
+  
+-- --
+
+  INSERT INTO order_products
+  VALUES (001, 111, 4);
+  
+  INSERT INTO products
+  VALUES (001, 'prod1', 300000, 'valid', '20220417 1:34:09 PM');
+  
+  INSERT INTO orders
+  VALUES (001, 334455, 'finish', '20220417 1:34:09 PM');
+  
+  INSERT INTO users
+  VALUES (001, 'Jumana', 'Jumana@hotmail.com','F', '1999','20220417 1:34:09 PM',966 );
+  
+  INSERT INTO countries
+  VALUES (966, 'Saudi', 'Asia');
+  
+  UPDATE countries
+  SET name = 'Saudi Arabi' ;
+  
+  DELETE FROM products 
+  WHERE id=001;
+
+
+
+
