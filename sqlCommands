@@ -1,11 +1,3 @@
-CREATE DATABASE store;
-
-
--- --
-  CREATE TABLE order_products (
-  order_id int FOREIGN KEY REFERENCES orders(id),
-  product_id int FOREIGN KEY REFERENCES products(id),
-  quantity int DEFAULT 0 );
 
 -- --
   CREATE TABLE products (
@@ -16,16 +8,14 @@ CREATE DATABASE store;
   created_at datetime
   CONSTRAINT const3 CHECK status='valid' OR status='expired');
   
--- --
   CREATE TABLE orders (
-  id int FOREIGN KEY REFERENCES users(id),
+  id int ,
   user_id int,
   status VARCHAR(6),
   created_at datetime ,
   CONSTRAINT const2 CHECK status='start' OR status='finish',
   CONSTRAINT const4 DEFAULT GETDATE() created_at);
   
-  -- --
   CREATE TABLE users (
   id int PRIMARY KEY,
   full_name VARCHAR(20),
@@ -33,14 +23,35 @@ CREATE DATABASE store;
   gender char(1) ,
   date_of_birth VARCHAR(15),
   created_at datetime,
-  country_code int FOREIGN KEY REFERENCES countries(code) 
   CONSTRAINT const CHECK gender='F' OR gender='M');
   
--- --
+  CREATE TABLE order_products (
+  quantity int DEFAULT 0 );
+  
   CREATE TABLE countries (
   code int PRIMARY KEY,
   name VARCHAR(20) unique,
   continent_name VARCHAR(20) NOT NULL);
+
+-- --
+  ALTER TABLE orders
+  ADD FOREIGN KEY (id) REFERENCES users(id);
+  
+  ALTER TABLE users
+  ADD FOREIGN KEY (country_code) REFERENCES countries(code);
+  
+  ALTER TABLE order_products
+  ADD FOREIGN KEY (order_id) REFERENCES orders(id);
+  
+  ALTER TABLE order_products
+  ADD FOREIGN KEY (product_id) REFERENCES products(id);
+  
+  
+  -- --
+ 
+  
+-- --
+
   
   
 -- --
@@ -65,7 +76,4 @@ CREATE DATABASE store;
   
   DELETE FROM products 
   WHERE id=001;
-
-
-
 
